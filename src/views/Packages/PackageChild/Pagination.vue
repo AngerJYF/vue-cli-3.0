@@ -134,6 +134,7 @@ export default {
       this.pageSize = val;
       this.current = val;
       this.actived = val;
+      console.log('val123',val);
       this.dataRestOrPage(val);
       this.currentPageDisabled();
     },
@@ -202,7 +203,7 @@ export default {
       let currentPage = this.currentPage;
       if (currentPage > pagePagerLength) {
         this.currentPage = this.currentStyle = pagePagerLength;
-        this.jumpVal = pagePagerLength + 1;
+        this.jumpVal = pagePagerLength;
       }
     },
     // 跳转第几页
@@ -237,6 +238,7 @@ export default {
     getSessionPageSize() {
       let pageSize =
         JSON.parse(sessionStorage.getItem("pageSize")) || this.pageSize;
+        console.log(pageSize);
       let pageSizeActived =
         JSON.parse(sessionStorage.getItem("pageSizeActived")) || this.pageSize;
       let currentPageNum =
@@ -247,18 +249,21 @@ export default {
         this.pageSizeVal = pageSize + " 条/页";
       }
       if (currentPageNum != "") {
-        this.currentPage = currentPageNum - 1;
-        this.currentStyle = currentPageNum - 1;
+        this.currentPage = currentPageNum;
+        this.currentStyle = currentPageNum;
+        this.jumpVal = currentPageNum;
+        console.log('jumpVal 123',this.jumpVal);
       } else {
         this.currentPage = this.currentStyle = 1;
       }
+      console.log('pageSizeActived',pageSizeActived);
       if (pageSizeActived != "") {
         this.actived = pageSizeActived;
       }
     },
     // 处理分页传值    不手动设置 pageSizeVal 的值,可忽略
     pageSizeReset() {
-      this.jumpVal = "";
+      // this.jumpVal = "";
       let pageSizeStyle = (this.pageSizeVal = this.pageSize + " 条/页");
       let getNum = pageSizeStyle.replace(/[^0-9]/gi, "");
 
