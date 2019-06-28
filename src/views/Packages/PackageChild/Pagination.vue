@@ -41,17 +41,17 @@
         >上一页</button>
         <div class="page-num-show">
           <ul class="page-num-ul clearfix">
-            <li class="number" :class="{selected:firstPageShow}">{{firstNum}}</li>
-            <li v-if="showPrevMore" @click="prePage">...</li>
+            <!-- <li class="number" :class="{selected:firstPageShow}">{{firstNum}}</li> -->
+            <!-- <li v-if="showPrevMore" @click="prePage">...</li> -->
             <li
               v-for="(item,index) of pagePager"
               :key="index"
               :class="{hover:currentStyle == item,selected:currentStyle == item}"
               @mouseenter="mouseenterClass($event,item,index)"
               @click="currentPageClass($event,item,index)"
-            >{{item+1}}</li>
-            <li v-if="showNextMore" @click="nextPage">...</li>
-            <li class="number" :class="{selected:lastPageShow}">{{lastNum}}</li>
+            >{{item}}</li>
+            <!-- <li v-if="showNextMore" @click="nextPage">...</li> -->
+            <!-- <li class="number" :class="{selected:lastPageShow}">{{lastNum}}</li> -->
           </ul>
         </div>
 
@@ -78,8 +78,8 @@ export default {
   props: ["backData"],
   data() {
     return {
-      showPrevMore: true, //分页之 上一页 省略号
-      showNextMore: true, //分页之 下一页 省略号
+      showPrevMore: false, //分页之 上一页 省略号
+      showNextMore: false, //分页之 下一页 省略号
       firstNum: 1, //分页之 第一页的显示的数字
       lastNum: 0, //分页之 最后一页的显示的数字
       firstPageShow: false, //分页之 第一页样式
@@ -135,6 +135,7 @@ export default {
       this.current = val;
       this.actived = val;
       this.dataRestOrPage(val);
+      this.currentPageDisabled();
     },
     // 每页显示多少条
     pageSizeShow() {
@@ -151,22 +152,20 @@ export default {
     prePage() {
       let currentPageNumPre = parseInt(this.currentPage) - 1;
       this.currentStyle = this.currentPage = currentPageNumPre;
-      this.jumpVal = currentPageNumPre + 1;
-      sessionStorage.setItem("currentPageNum", currentPageNumPre + 1);
+      this.jumpVal = currentPageNumPre;
+      sessionStorage.setItem("currentPageNum", currentPageNumPre);
       console.log(
-        `发送 ajax 请求,跳转页数,传参 ===> {currentPage: ${currentPageNumPre +
-          1}}`
+        `发送 ajax 请求,跳转页数,传参 ===> {currentPage: ${currentPageNumPre}}`
       );
     },
     // 下一页
     nextPage() {
       let currentPageNumNext = parseInt(this.currentPage) + 1;
       this.currentStyle = this.currentPage = currentPageNumNext;
-      this.jumpVal = currentPageNumNext + 1;
-      sessionStorage.setItem("currentPageNum", currentPageNumNext + 1);
+      this.jumpVal = currentPageNumNext;
+      sessionStorage.setItem("currentPageNum", currentPageNumNext);
       console.log(
-        `发送 ajax 请求,跳转页数,传参 ===> {currentPage: ${currentPageNumNext +
-          1}}`
+        `发送 ajax 请求,跳转页数,传参 ===> {currentPage: ${currentPageNumNext}}`
       );
     },
     //上.下一页 禁止处理
@@ -174,31 +173,34 @@ export default {
       let PagePagerLengthVal = this.pagePager.length;
       let currentPage = val == undefined || null || "" ? this.currentPage : val;
       if (currentPage == PagePagerLengthVal) {
+        // this.lastPageShow = true;
         this.disabledNext = true; // 禁用下一页功能
       } else {
+        // this.lastPageShow = false;
         this.disabledNext = false;
       }
       if (currentPage == 1) {
+        // this.firstPageShow = true;
         this.disabledPre = true;
       } else {
+        // this.firstPageShow = false;
         this.disabledPre = false;
       }
     },
-
     // 当前所在页数
     currentPageClass(event, val, index) {
-      sessionStorage.setItem("currentPageNum", val + 1);
+      console.log("val", val);
+      sessionStorage.setItem("currentPageNum", val);
       this.currentPage = val;
       this.currentStyle = val;
-      console.log(`发送 ajax 请求,当前页,传参 ===> {currentPage: ${val + 1}}`);
+      this.jumpVal = val;
+      console.log(`发送 ajax 请求,当前页,传参 ===> {currentPage: ${val}}`);
     },
     // 根据显示页条数,调整当前所在页;
     currentPageReset() {
       let pagePagerLength = this.pagePager.length;
       let currentPage = this.currentPage;
       if (currentPage > pagePagerLength) {
-        console.log("pagePagerLength", pagePagerLength);
-
         this.currentPage = this.currentStyle = pagePagerLength;
         this.jumpVal = pagePagerLength + 1;
       }
@@ -206,28 +208,30 @@ export default {
     // 跳转第几页
     jumpPage() {
       let jumpVal = parseInt(this.jumpVal == "" ? 1 : this.jumpVal);
-      console.log("jumpVal", jumpVal);
       let jumpPageNum =
         jumpVal > this.pagePager.length
           ? (this.jumpVal = this.pagePager.length)
-          : jumpVal - 1;
+          : jumpVal;
       this.currentPage = this.currentStyle = jumpPageNum;
-      sessionStorage.setItem("currentPageNum", jumpPageNum + 1);
+      sessionStorage.setItem("currentPageNum", jumpPageNum);
       console.log(
-        `发送 ajax 请求,跳转页数,传参 ===> {currentPage: ${jumpPageNum + 1}}`
+        `发送 ajax 请求,跳转页数,传参 ===> {currentPage: ${jumpPageNum}}`
       );
     },
     // 分页条数的展示
     dataRestOrPage(val) {
+      console.log('val1111',val);
+      console.log('this.actived',this.actived);
       this.actived = this.current = this.pageSize;
       this.pagePager = [];
       let totleNum = this.total;
       let pageSizeNumPre = this.pageSize;
       let resultPageSize = Math.ceil(totleNum / pageSizeNumPre);
-      for (let item = 1; item <= resultPageSize - 2; item++) {
+      for (let item = 1; item <= resultPageSize; item++) {
         this.pagePager.push(item);
       }
-      this.lastNum = resultPageSize;
+      console.log("this.pagePager", this.pagePager);
+      // this.lastNum = resultPageSize;
     },
     // 分页记忆功能 之 每页显示条数
     getSessionPageSize() {
@@ -271,6 +275,7 @@ export default {
   },
   watch: {
     currentPage(currentPage) {
+      console.log("currentPage", currentPage);
       // 控制 上|下翻页 的,禁止-启用 功能;
       this.currentPageDisabled(currentPage);
     },
