@@ -1,6 +1,5 @@
 /**
  * api接口统一管理
- * by fengyang
  */
 import {
   post, get
