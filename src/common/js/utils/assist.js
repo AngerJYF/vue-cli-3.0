@@ -1,11 +1,3 @@
-/*
- * @Author: fengchaoran 
- * @Date: 2018-12-24 10:58:01 
- * @Last Modified by: fengchaoran
- * @Last Modified time: 2018-12-24 10:58:57
- * 组件通信
- */
-
 // 由一个组件，向上找到最近的指定组件
 export function findComponentUpward (context, componentName) {
   let parent = context.$parent;
