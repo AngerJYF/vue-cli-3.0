@@ -1,9 +1,4 @@
-/*
- * @Author: fengchaoran 
- * @Date: 2018-12-28 10:33:52 
- * @Last Modified by: fengchaoran
- * @Last Modified time: 2019-02-22 10:14:07
- */
+
 import moment from "moment";
 /**
  * 遍历返回数据，动态next()第一个满足条件的路由
