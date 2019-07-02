@@ -1,11 +1,6 @@
 import { promises } from "fs";
 
 /*
- * @Author: fengchaoran 
- * @Date: 2018-12-21 15:27:45 
- * @Last Modified by: 冯超然
- * @Last Modified time: 2019-03-13 11:05:31
- * 
  * 实现dispatch(向上触发事件)/broadcast(向下广播事件)
  * 只需要提供向上或向下的组件name,就可以触发事件
  * mixins进组件或App.vue(需要provide{return app:this},子组件inject接受app实例)
