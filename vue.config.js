@@ -10,7 +10,7 @@ module.exports = {
   // publicPath: process.env.NODE_ENV === 'production' ? '/bjdiantai/' : '/',
   //需要根据实际项目的后台文件路径设置，涉及到页面css、js的文件加载路径，/则为后台根路径
   //可以为相对路径'./'，这样所有资源都会按照相对路径来读取，根据实际项目设置
-  publicPath: '/',
+  publicPath: './',
   //打包输出文件夹,默认dist
   outputDir: 'dist',
 
